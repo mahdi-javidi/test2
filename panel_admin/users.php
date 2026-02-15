@@ -25,7 +25,7 @@ if (isset($_POST['create_user_btn'])) {
         $message = "خطا: این نام کاربری قبلاً ثبت شده است.";
     } else {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $connection->prepare("INSERT INTO users (username, email, password_hash, status) VALUES (?,?,?,?)");
+        $stmt = $connection->prepare("INSERT INTO users (username, email, password, status) VALUES (?,?,?,?)");
         $stmt->bind_param('ssss', $username, $email, $hashed_password, $status);
         if ($stmt->execute()) {
             echo "<script>window.location.href='?section=users';</script>";

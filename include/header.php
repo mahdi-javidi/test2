@@ -52,72 +52,87 @@
                 <div class="nav-extras ms-auto">
                     <button class="btn btn-outline-light" id="searchBtn"><i class="fas fa-search"></i></button>
                     <button class="btn btn-outline-light" id="themeToggle"><i class="fas fa-moon"></i></button>
-                    <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#signUpModal">Sign Up</button>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal" id="loginBtn">Login</button>
+                    <div id="authButtons">
+                        <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#signUpModal">Sign Up</button>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal" id="loginBtn">Login</button>
+                    </div>
+                    <div id="userProfile" style="display:none;">
+                        <div class="dropdown">
+                            <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle"></i> <span id="usernameDisplay"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> Profile</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </nav>
 </header>
 <div class="modal fade" id="signUpModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content bg-dark text-light border-0">
-      <div class="modal-header">
-        <h5 class="modal-title">Create Account</h5>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-light border-0 shadow-lg">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title"><i class="fas fa-user-plus"></i> Create Your Account</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body p-4">
         <div class="mb-3">
-          <label class="form-label">Username</label>
-          <input type="text" id="su-username" class="form-control" minlength="2" required>
+          <label class="form-label"><i class="fas fa-user"></i> Username</label>
+          <input type="text" id="su-username" class="form-control form-control-lg" placeholder="Choose a username" minlength="2" required>
         </div>
         <div class="mb-3">
-          <label class="form-label">Email</label>
-          <input type="email" id="su-email" class="form-control" required>
+          <label class="form-label"><i class="fas fa-envelope"></i> Email</label>
+          <input type="email" id="su-email" class="form-control form-control-lg" placeholder="your@email.com" required>
         </div>
         <div class="mb-3">
-          <label class="form-label">Password</label>
-          <input type="password" id="su-password" class="form-control" minlength="6" required>
+          <label class="form-label"><i class="fas fa-lock"></i> Password</label>
+          <input type="password" id="su-password" class="form-control form-control-lg" placeholder="Min 6 characters" minlength="6" required>
         </div>
         <div class="mb-3">
-          <label class="form-label">Phone</label>
-          <input type="tel" id="su-phone" class="form-control" placeholder="+1 555 555 5555">
+          <label class="form-label"><i class="fas fa-phone"></i> Phone (Optional)</label>
+          <input type="tel" id="su-phone" class="form-control form-control-lg" placeholder="+1 555 555 5555">
         </div>
         <div class="mb-3">
-          <label class="form-label">Profile Picture</label>
+          <label class="form-label"><i class="fas fa-image"></i> Profile Picture (Optional)</label>
           <input type="file" id="su-avatar" class="form-control" accept="image/*">
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer border-secondary">
         <button class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
-        <button class="btn btn-primary" id="su-submit">Sign Up</button>
+        <button class="btn btn-primary btn-lg px-4" id="su-submit"><i class="fas fa-check"></i> Sign Up</button>
       </div>
     </div>
   </div>
  </div>
  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-md modal-animate">
-    <div class="modal-content bg-dark text-light border-0">
-      <div class="modal-header">
-        <h5 class="modal-title">Login</h5>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-light border-0 shadow-lg">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title"><i class="fas fa-sign-in-alt"></i> Welcome Back</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body p-4">
         <div class="mb-3">
-          <label class="form-label">Username</label>
-          <input type="text" id="li-username" class="form-control" required>
+          <label class="form-label"><i class="fas fa-user"></i> Username</label>
+          <input type="text" id="li-username" class="form-control form-control-lg" placeholder="Enter your username" required>
         </div>
         <div class="mb-3">
-          <label class="form-label">Password</label>
-          <input type="password" id="li-password" class="form-control" required>
+          <label class="form-label"><i class="fas fa-lock"></i> Password</label>
+          <input type="password" id="li-password" class="form-control form-control-lg" placeholder="Enter your password" required>
         </div>
-        <div class="mt-2">
-          <small class="text-muted">Don't have an account? <a href="#" id="openRegister" class="link-info">Register</a></small>
+        <div class="mt-3 text-center">
+          <small class="text-muted">Don't have an account? <a href="#" id="openRegister" class="link-info fw-bold">Create one now</a></small>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer border-secondary">
         <button class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
-        <button class="btn btn-primary" id="li-submit">Login</button>
+        <button class="btn btn-primary btn-lg px-4" id="li-submit"><i class="fas fa-sign-in-alt"></i> Login</button>
       </div>
     </div>
   </div>
@@ -125,11 +140,35 @@
  <style>
  .modal-animate { transform: translateY(20px) scale(0.98); transition: transform .2s ease, opacity .2s ease; }
  .modal.show .modal-animate { transform: translateY(0) scale(1); }
- @media (max-width: 576px) { .modal-dialog.modal-md { max-width: 95%; margin: 0 auto; } }
+ .modal-content { border-radius: 15px; }
+ .modal-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px 15px 0 0; }
+ .form-control-lg { border-radius: 10px; background: #2d3748; border: 1px solid #4a5568; color: #fff; }
+ .form-control-lg:focus { background: #374151; border-color: #667eea; box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25); }
+ @media (max-width: 576px) { .modal-dialog { max-width: 95%; margin: 0 auto; } }
  </style>
  <script>
  (function(){
   window.IS_LOGGED_IN = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
+  window.CURRENT_USERNAME = <?php echo isset($_SESSION['username']) ? json_encode($_SESSION['username']) : 'null'; ?>;
+  
+  function updateAuthUI() {
+    const authButtons = document.getElementById('authButtons');
+    const userProfile = document.getElementById('userProfile');
+    const usernameDisplay = document.getElementById('usernameDisplay');
+    
+    if (window.IS_LOGGED_IN && window.CURRENT_USERNAME) {
+      authButtons.style.display = 'none';
+      userProfile.style.display = 'block';
+      usernameDisplay.textContent = window.CURRENT_USERNAME;
+    } else {
+      authButtons.style.display = 'block';
+      userProfile.style.display = 'none';
+    }
+  }
+  
+  // Initialize UI on load
+  updateAuthUI();
+  
   function postForm(url, data) {
     return fetch(url, {
       method: 'POST',
@@ -176,6 +215,8 @@
          if (modal) modal.hide();
          alert('Registration successful. Welcome, ' + res.data.username + '!');
           window.IS_LOGGED_IN = true;
+          window.CURRENT_USERNAME = res.data.username;
+          updateAuthUI();
        } else {
          alert(res.data && res.data.error ? res.data.error : 'Registration failed');
        }
@@ -211,8 +252,33 @@
          if (modal) modal.hide();
          alert('Logged in as ' + res.data.username);
          window.IS_LOGGED_IN = true;
+         window.CURRENT_USERNAME = res.data.username;
+         updateAuthUI();
        } else {
          alert(res.data && res.data.error ? res.data.error : 'Login failed');
+       }
+     });
+   }
+   
+   // Logout handler
+   const logoutBtn = document.getElementById('logoutBtn');
+   if (logoutBtn) {
+     logoutBtn.addEventListener('click', async function(e){
+       e.preventDefault();
+       const token = await ensureCsrf();
+       const resRaw = await fetch('php_admin/api/auth.php', {
+         method:'POST',
+         headers: {'Content-Type': 'application/x-www-form-urlencoded', ...(token ? {'X-CSRF-Token': token} : {})},
+         body: new URLSearchParams({ action:'logout' })
+       });
+       let resData = null;
+       try { resData = await resRaw.json(); } catch(e) { resData = null; }
+       const res = { ok: resRaw.ok, data: resData };
+       if (res.ok && res.data && res.data.ok) {
+         alert('Logged out successfully');
+         window.IS_LOGGED_IN = false;
+         window.CURRENT_USERNAME = null;
+         updateAuthUI();
        }
      });
    }

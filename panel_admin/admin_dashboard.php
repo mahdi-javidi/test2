@@ -36,8 +36,8 @@ $page = isset($_GET['section']) ? $_GET['section'] : 'main';
             <a href="?section=posts" class="nav-link <?= $page == 'posts' ? 'active' : '' ?>">
                 <i class="fas fa-file-alt"></i> مدیریت پست‌ها
             </a>
-            <a href="?section=products" class="nav-link <?= $page == 'products' ? 'active' : '' ?>">
-                <i class="fas fa-box"></i> مدیریت محصولات
+            <a href="?section=subscriptions" class="nav-link <?= $page == 'subscriptions' ? 'active' : '' ?>">
+                <i class="fas fa-crown"></i> مدیریت اشتراک
             </a>
             <a href="?section=slider" class="nav-link <?= $page == 'slider' ? 'active' : '' ?>">
                 <i class="fas fa-images"></i> مدیریت اسلایدر
@@ -65,7 +65,7 @@ $page = isset($_GET['section']) ? $_GET['section'] : 'main';
                 case 'posts':
                     include(__DIR__ . '/posts.php');
                     break;
-                case 'products':
+                case 'subscriptions':
                     include(__DIR__ . '/subscription.php');
                     break;
                 case 'slider':

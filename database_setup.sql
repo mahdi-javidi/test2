@@ -12,10 +12,12 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL,
     phone VARCHAR(20) DEFAULT NULL,
     profile_picture VARCHAR(255) DEFAULT NULL,
+    status ENUM('active', 'inactive', 'banned') DEFAULT 'active',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_username (username),
-    INDEX idx_email (email)
+    INDEX idx_email (email),
+    INDEX idx_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Posts table
@@ -84,6 +86,27 @@ INSERT INTO posts (title, content, image_url) VALUES
 ('New Tournament Announced', 'Get ready for our biggest tournament yet! Register now and compete for amazing prizes.', '5.jpg'),
 ('Community Update', 'Thank you to all our amazing community members. Your support means everything to us!', '3.jpg');
 
+-- Subscriptions table
+CREATE TABLE IF NOT EXISTS subscriptions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    duration_months INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    discount_percentage INT DEFAULT 0,
+    discount_end_date DATETIME DEFAULT NULL,
+    description TEXT DEFAULT NULL,
+    is_active TINYINT(1) DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_is_active (is_active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Insert default subscription plans
+INSERT INTO subscriptions (title, duration_months, price, description) VALUES
+('اشتراک یک ماهه', 1, 9.99, 'دسترسی کامل به تمام بازی‌ها برای یک ماه'),
+('اشتراک دو ماهه', 2, 17.99, 'دسترسی کامل به تمام بازی‌ها برای دو ماه'),
+('اشتراک سه ماهه', 3, 24.99, 'دسترسی کامل به تمام بازی‌ها برای سه ماه');
+
 -- Create admin user (password: admin123)
-INSERT INTO users (username, email, password) VALUES
-('admin', 'admin@arcade.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
+INSERT INTO users (username, email, password, status) VALUES
+('admin', 'admin@arcade.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'active');

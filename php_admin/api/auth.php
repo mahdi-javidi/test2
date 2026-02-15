@@ -115,6 +115,20 @@ if ($action === 'register') {
         echo json_encode(['ok' => false, 'error' => 'Invalid username or password']);
     }
     
+} elseif ($action === 'logout') {
+    // Clear session
+    $_SESSION = array();
+    
+    // Destroy session cookie
+    if (isset($_COOKIE[session_name()])) {
+        setcookie(session_name(), '', time()-3600, '/');
+    }
+    
+    // Destroy session
+    session_destroy();
+    
+    echo json_encode(['ok' => true, 'message' => 'Logged out successfully']);
+    
 } else {
     echo json_encode(['ok' => false, 'error' => 'Invalid action']);
 }

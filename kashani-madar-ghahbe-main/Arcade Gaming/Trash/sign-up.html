@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up Page</title>
+    <link rel="stylesheet" href="sign-up-css.css"/>
+</head>
+<body>
+    <div class="signup-box">
+        <h2>Sign Up</h2>
+        <form id="signupForm" onsubmit="return validateForm(event)">
+            <input type="text" id="fullname" placeholder="Username" required />
+            <div id="usernameError" class="error-message"></div>
+            
+            <input type="email" id="email" placeholder="Email Address" required />
+            <div id="emailError" class="error-message"></div>
+            
+            <input type="date" id="dob" required />
+            <div id="dobError" class="error-message"></div>
+            
+            <input type="password" id="password" placeholder="Password" required />
+            <div id="passwordError" class="error-message"></div>
+            
+            <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
+            <div id="confirmPasswordError" class="error-message"></div>
+
+            <div class="terms-container">
+                <input type="checkbox" id="terms" required />
+                <label for="terms" style="font-size: 15px;">I agree to the Terms and Conditions</label>
+            </div>
+            <div id="termsError" class="error-message"></div>
+            
+            <button type="submit">Sign Up</button>
+            <h5 class="account">Already have an account?</h5>
+            <h5 class="link"><a href="Login page.html">Login</a></h5>
+        </form>
+    </div>
+    <script>
+        function validateForm(event) {
+            event.preventDefault();
+            let isValid = true;
+
+            document.querySelectorAll('.error-message').forEach(error => {
+                error.style.display = 'none';
+            });
+
+            const fullname = document.getElementById('fullname').value.trim();
+            if (fullname.length < 3) {
+                document.getElementById('usernameError').textContent = 'Username must be at least 3 characters!';
+                document.getElementById('usernameError').style.display = 'block';
+                isValid = false;
+            }
+
+            const email = document.getElementById('email').value.trim();
+            const emailRegex = /^[\S+@\S+\.\S+]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('emailError').textContent = 'Please enter a valid email address!';
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            }
+
+            const dobValue = document.getElementById('dob').value;
+            if (!dobValue) {
+                document.getElementById('dobError').textContent = 'Please select your date of birth!';
+                document.getElementById('dobError').style.display = 'block';
+                isValid = false;
+            } else {
+                const dob = new Date(dobValue);
+                const today = new Date();
+                let age = today.getFullYear() - dob.getFullYear();
+                const monthDiff = today.getMonth() - dob.getMonth();
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                    age--;
+                }
+                if (age < 18) {
+                    document.getElementById('dobError').textContent = 'You must be at least 18 years old!';
+                    document.getElementById('dobError').style.display = 'block';
+                    isValid = false;
+                }
+            }
+
+            const password = document.getElementById('password').value;
+            if (password.length < 8) {
+                document.getElementById('passwordError').textContent = 'Password must be at least 8 characters!';
+                document.getElementById('passwordError').style.display = 'block';
+                isValid = false;
+            }
+
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            if (password !== confirmPassword) {
+                document.getElementById('confirmPasswordError').textContent = 'Passwords does not match!';
+                document.getElementById('confirmPasswordError').style.display = 'block';
+                isValid = false;
+            }
+
+            const terms = document.getElementById('terms').checked;
+            if (!terms) {
+                document.getElementById('termsError').textContent = 'You must accept the Terms and Conditions!';
+                document.getElementById('termsError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (isValid) {
+                alert('Sign up successful!');
+            }
+
+            return false;
+        }
+    </script>
+</body>
+</html>

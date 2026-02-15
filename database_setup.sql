@@ -13,11 +13,13 @@ CREATE TABLE IF NOT EXISTS users (
     phone VARCHAR(20) DEFAULT NULL,
     profile_picture VARCHAR(255) DEFAULT NULL,
     status ENUM('active', 'inactive', 'banned') DEFAULT 'active',
+    is_admin TINYINT(1) DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_username (username),
     INDEX idx_email (email),
-    INDEX idx_status (status)
+    INDEX idx_status (status),
+    INDEX idx_is_admin (is_admin)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Posts table
@@ -108,5 +110,5 @@ INSERT INTO subscriptions (title, duration_months, price, description) VALUES
 ('اشتراک سه ماهه', 3, 24.99, 'دسترسی کامل به تمام بازی‌ها برای سه ماه');
 
 -- Create admin user (password: admin123)
-INSERT INTO users (username, email, password, status) VALUES
-('admin', 'admin@arcade.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'active');
+INSERT INTO users (username, email, password, status, is_admin) VALUES
+('admin', 'admin@arcade.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'active', 1);

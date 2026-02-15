@@ -2,11 +2,29 @@
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 require_once __DIR__ . '/../include/db.php';
 $connection = $mysqli;
+
+// Check if user is admin
+$check_result = $connection->query("SELECT is_admin FROM users WHERE id = " . intval($_GET['id'] ?? 0));
+$is_target_admin = false;
+if ($check_result && $row = $check_result->fetch_assoc()) {
+    $is_target_admin = $row['is_admin'] == 1;
+}
+
 if (isset($_GET['set_status']) && isset($_GET['id'])) {
     $id = intval($_GET['id']);
-    $new_status = $_GET['set_status'] === 'active' ? 'active' : 'deactive';
+    
+    // Check if target user is admin
+    $check = $connection->query("SELECT is_admin FROM users WHERE id = $id");
+    if ($check && $row = $check->fetch_assoc()) {
+        if ($row['is_admin'] == 1) {
+            echo "<script>alert('Cannot modify admin users!'); window.location.href='?section=users';</script>";
+            exit();
+        }
+    }
+    
+    $new_status = $_GET['set_status'] === 'active' ? 'active' : 'inactive';
     if ($id != ($_SESSION['user_id'] ?? -1)) {
-        $stmt = $connection->prepare("UPDATE users SET status=? WHERE id=?");
+        $stmt = $connection->prepare("UPDATE users SET status=? WHERE id=? AND is_admin=0");
         $stmt->bind_param('si', $new_status, $id);
         $stmt->execute();
         $stmt->close();
@@ -14,18 +32,19 @@ if (isset($_GET['set_status']) && isset($_GET['id'])) {
         exit();
     }
 }
+
 $message = "";
 if (isset($_POST['create_user_btn'])) {
     $username = $connection->real_escape_string($_POST['username']);
     $email = $connection->real_escape_string($_POST['email']);
     $password = $_POST['password'];
-    $status = $_POST['status'] === 'deactive' ? 'deactive' : 'active';
+    $status = $_POST['status'] === 'inactive' ? 'inactive' : 'active';
     $check = $connection->query("SELECT 1 FROM users WHERE username='$username'");
     if ($check && $check->num_rows > 0) {
         $message = "خطا: این نام کاربری قبلاً ثبت شده است.";
     } else {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $connection->prepare("INSERT INTO users (username, email, password, status) VALUES (?,?,?,?)");
+        $stmt = $connection->prepare("INSERT INTO users (username, email, password, status, is_admin) VALUES (?,?,?,?,0)");
         $stmt->bind_param('ssss', $username, $email, $hashed_password, $status);
         if ($stmt->execute()) {
             echo "<script>window.location.href='?section=users';</script>";
@@ -36,15 +55,27 @@ if (isset($_POST['create_user_btn'])) {
         $stmt->close();
     }
 }
+
 if (isset($_GET['delete_id'])) {
     $id = intval($_GET['delete_id']);
+    
+    // Check if target user is admin
+    $check = $connection->query("SELECT is_admin FROM users WHERE id = $id");
+    if ($check && $row = $check->fetch_assoc()) {
+        if ($row['is_admin'] == 1) {
+            echo "<script>alert('Cannot delete admin users!'); window.location.href='?section=users';</script>";
+            exit();
+        }
+    }
+    
     if ($id != ($_SESSION['user_id'] ?? -1)) {
-        $connection->query("DELETE FROM users WHERE id = $id");
+        $connection->query("DELETE FROM users WHERE id = $id AND is_admin = 0");
     }
     echo "<script>window.location.href='?section=users';</script>";
     exit();
 }
-$users = $connection->query("SELECT id, username, email, status FROM users ORDER BY id DESC");
+
+$users = $connection->query("SELECT id, username, email, status, is_admin FROM users ORDER BY is_admin DESC, id DESC");
 ?>
 <div class="container-fluid p-0">
     <div class="card mb-4 border-success">
@@ -60,7 +91,7 @@ $users = $connection->query("SELECT id, username, email, status FROM users ORDER
                 <div class="col-md-2 mb-2">
                     <select name="status" class="form-control">
                         <option value="active">فعال</option>
-                        <option value="deactive">غیرفعال</option>
+                        <option value="inactive">غیرفعال</option>
                     </select>
                 </div>
                 <div class="col-md-1"><button type="submit" name="create_user_btn" class="btn btn-success w-100">ثبت</button></div>
@@ -76,27 +107,43 @@ $users = $connection->query("SELECT id, username, email, status FROM users ORDER
                         <th>ID</th>
                         <th>نام</th>
                         <th>ایمیل</th>
+                        <th>نقش</th>
                         <th>وضعیت</th>
                         <th>عملیات</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if ($users) while($row = $users->fetch_assoc()): ?>
-                    <tr style="<?= $row['status'] === 'deactive' ? 'background:#fff5f5;' : '' ?>">
+                    <tr style="<?= $row['is_admin'] == 1 ? 'background: rgba(120, 119, 198, 0.1);' : ($row['status'] === 'inactive' ? 'background:#fff5f5;' : '') ?>">
                         <td><?= $row['id']; ?></td>
                         <td><?= $row['username']; ?></td>
                         <td><?= $row['email']; ?></td>
                         <td>
-                            <?php if($row['status'] === 'active'): ?>
-                                <span class="text-success font-weight-bold">فعال</span>
+                            <?php if($row['is_admin'] == 1): ?>
+                                <span class="badge" style="background: linear-gradient(45deg, #7877c6, #ff77c6); padding: 0.5rem 1rem;">
+                                    <i class="fas fa-crown"></i> مدیر
+                                </span>
                             <?php else: ?>
-                                <span class="text-danger font-weight-bold">غیرفعال</span>
+                                <span class="badge bg-secondary">کاربر</span>
                             <?php endif; ?>
                         </td>
                         <td>
-                            <?php if($row['id'] != ($_SESSION['user_id'] ?? -1)): ?>
+                            <?php if($row['status'] === 'active'): ?>
+                                <span class="text-success font-weight-bold">فعال</span>
+                            <?php elseif($row['status'] === 'banned'): ?>
+                                <span class="text-danger font-weight-bold">مسدود</span>
+                            <?php else: ?>
+                                <span class="text-warning font-weight-bold">غیرفعال</span>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <?php if($row['is_admin'] == 1): ?>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-shield-alt"></i> محافظت شده
+                                </span>
+                            <?php elseif($row['id'] != ($_SESSION['user_id'] ?? -1)): ?>
                                 <?php if($row['status'] === 'active'): ?>
-                                    <a href="?section=users&set_status=deactive&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm">غیرفعال کردن</a>
+                                    <a href="?section=users&set_status=inactive&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm">غیرفعال کردن</a>
                                 <?php else: ?>
                                     <a href="?section=users&set_status=active&id=<?= $row['id']; ?>" class="btn btn-success btn-sm">فعال‌سازی</a>
                                 <?php endif; ?>

@@ -14,9 +14,9 @@ if (!$mysqli) {
 }
 ?>
 
-<main>
+<main style="padding-top: 100px;">
 
-    <div id="demo" class="container carousel slide mt-3" data-bs-ride="carousel">
+    <div id="demo" class="container carousel slide" data-bs-ride="carousel" style="margin-top: 20px !important;">
 
         <div class="carousel-indicators">
             <?php for ($i = 0; $i < count($slider); $i++): ?>

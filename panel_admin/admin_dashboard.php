@@ -40,6 +40,9 @@ $page = isset($_GET['section']) ? $_GET['section'] : 'main';
                 <i class="fas fa-comments"></i> مدیریت نظرات
             </a>
             <hr style="border-color: #2d3748;">
+            <a href="#" id="darkModeToggle" class="nav-link">
+                <i class="fas fa-moon"></i> حالت تاریک
+            </a>
             <a href="logout.php" class="nav-link text-danger">
                 <i class="fas fa-sign-out-alt"></i> خروج
             </a>
@@ -75,5 +78,41 @@ $page = isset($_GET['section']) ? $_GET['section'] : 'main';
             ?>
         </div>
     </div>
+    <script>
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+        
+        // Check for saved dark mode preference
+        if (localStorage.getItem('adminDarkMode') === 'enabled') {
+            body.classList.add('dark-mode');
+            updateDarkModeIcon(true);
+        }
+        
+        darkModeToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('adminDarkMode', 'enabled');
+                updateDarkModeIcon(true);
+            } else {
+                localStorage.setItem('adminDarkMode', 'disabled');
+                updateDarkModeIcon(false);
+            }
+        });
+        
+        function updateDarkModeIcon(isDark) {
+            const icon = darkModeToggle.querySelector('i');
+            const text = darkModeToggle.childNodes[1];
+            if (isDark) {
+                icon.className = 'fas fa-sun';
+                text.textContent = ' حالت روشن';
+            } else {
+                icon.className = 'fas fa-moon';
+                text.textContent = ' حالت تاریک';
+            }
+        }
+    </script>
 </body>
 </html>

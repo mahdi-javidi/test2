@@ -210,13 +210,13 @@ if (!$mysqli) {
 <!-- Subscription Modal -->
 <div class="modal fade" id="subscriptionModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content bg-dark text-light border-0 shadow-lg">
-      <div class="modal-header border-secondary" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-        <h5 class="modal-title"><i class="fas fa-crown"></i> Choose Your Subscription Plan</h5>
+    <div class="modal-content" style="background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(20px); border: 2px solid rgba(255, 255, 255, 0.15); border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);">
+      <div class="modal-header border-0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px 20px 0 0; padding: 1.5rem;">
+        <h5 class="modal-title text-white" style="font-family: 'Orbitron', monospace; font-size: 1.5rem;"><i class="fas fa-crown"></i> Choose Your Subscription Plan</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body p-4">
-        <div class="alert alert-info">
+      <div class="modal-body p-4" style="background: rgba(10, 10, 10, 0.8);">
+        <div class="alert" style="background: rgba(120, 219, 255, 0.15); border: 1px solid rgba(120, 219, 255, 0.3); border-radius: 12px; color: #78dbff;">
           <i class="fas fa-info-circle"></i> Selected Platform: <strong id="selectedPlatform">PC</strong>
         </div>
         <div class="row g-3" id="subscriptionPlans">
@@ -227,46 +227,144 @@ if (!$mysqli) {
   </div>
 </div>
 
+<!-- Success Popup Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(20px); border: 2px solid rgba(74, 222, 128, 0.5); border-radius: 20px; box-shadow: 0 20px 60px rgba(74, 222, 128, 0.3);">
+      <div class="modal-body text-center p-5">
+        <div style="width: 80px; height: 80px; margin: 0 auto 1.5rem; background: linear-gradient(45deg, #4ade80, #22c55e); border-radius: 50%; display: flex; align-items: center; justify-content: center; animation: successPulse 1s ease-out;">
+          <i class="fas fa-check" style="font-size: 3rem; color: white;"></i>
+        </div>
+        <h3 style="color: #4ade80; font-family: 'Orbitron', monospace; margin-bottom: 1rem;">Purchase Successful!</h3>
+        <p id="successMessage" style="color: rgba(255, 255, 255, 0.9); font-size: 1.1rem; line-height: 1.6; margin-bottom: 1.5rem;"></p>
+        <button class="btn btn-success" data-bs-dismiss="modal" style="background: linear-gradient(45deg, #4ade80, #22c55e); border: none; padding: 0.75rem 2rem; border-radius: 25px; font-weight: 600;">
+          <i class="fas fa-gamepad"></i> Start Gaming
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
 .subscription-card {
-  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
-  border: 2px solid #4a5568;
+  background: linear-gradient(135deg, rgba(45, 55, 72, 0.8) 0%, rgba(26, 32, 44, 0.8) 100%);
+  border: 2px solid rgba(120, 119, 198, 0.3);
   border-radius: 15px;
-  padding: 20px;
+  padding: 1.5rem;
   transition: all 0.3s ease;
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(10px);
 }
+
+.subscription-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(120, 119, 198, 0.1) 0%, rgba(255, 119, 198, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
 .subscription-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
   border-color: #667eea;
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
 }
-.subscription-card.has-discount::before {
+
+.subscription-card:hover::before {
+  opacity: 1;
+}
+
+.subscription-card.has-discount::after {
   content: 'SALE';
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #e53e3e;
+  top: 15px;
+  right: 15px;
+  background: linear-gradient(45deg, #ef4444, #dc2626);
   color: white;
   padding: 5px 15px;
   border-radius: 20px;
   font-weight: bold;
   font-size: 12px;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+  animation: saleBounce 2s ease-in-out infinite;
 }
+
+@keyframes saleBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
 .subscription-price {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: bold;
-  color: #667eea;
+  background: linear-gradient(45deg, #7877c6, #ff77c6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: 'Orbitron', monospace;
 }
+
 .subscription-price.discounted {
-  color: #48bb78;
+  background: linear-gradient(45deg, #4ade80, #22c55e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
+
 .original-price {
   text-decoration: line-through;
-  color: #a0aec0;
+  color: rgba(255, 255, 255, 0.4);
   font-size: 1.2rem;
+}
+
+.subscription-card h4 {
+  color: #ffffff;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+}
+
+.subscription-card p {
+  color: rgba(255, 255, 255, 0.7);
+  position: relative;
+  z-index: 1;
+}
+
+.subscription-card .btn {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(45deg, #7877c6, #ff77c6);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.subscription-card:hover .btn {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(120, 119, 198, 0.5);
+}
+
+@keyframes successPulse {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-backdrop.show {
+  opacity: 0.8;
 }
 </style>
 
@@ -293,7 +391,7 @@ if (!$mysqli) {
     const subscriptions = await loadSubscriptions();
     
     if (subscriptions.length === 0) {
-      container.innerHTML = '<div class="col-12"><div class="alert alert-warning">No subscription plans available at the moment.</div></div>';
+      container.innerHTML = '<div class="col-12"><div class="alert alert-warning" style="background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.3); color: #fbbf24; border-radius: 12px;">No subscription plans available at the moment.</div></div>';
       return;
     }
     
@@ -308,12 +406,14 @@ if (!$mysqli) {
             <div class="text-center mb-3">
               ${hasDiscount ? `<div class="original-price">$${sub.price}</div>` : ''}
               <div class="subscription-price ${hasDiscount ? 'discounted' : ''}">$${finalPrice}</div>
-              <small class="text-muted">${sub.duration_months} month${sub.duration_months > 1 ? 's' : ''}</small>
+              <small style="color: rgba(255, 255, 255, 0.6);">${sub.duration_months} month${sub.duration_months > 1 ? 's' : ''}</small>
             </div>
-            ${sub.description ? `<p class="text-center text-muted small">${sub.description}</p>` : ''}
-            ${hasDiscount ? `<div class="text-center"><span class="badge bg-danger">${sub.discount_percentage}% OFF</span></div>` : ''}
+            ${sub.description ? `<p class="text-center small" style="min-height: 60px;">${sub.description}</p>` : '<p class="text-center small" style="min-height: 60px;">Full access to all games</p>'}
+            ${hasDiscount ? `<div class="text-center mb-3"><span class="badge" style="background: linear-gradient(45deg, #ef4444, #dc2626); padding: 0.5rem 1rem; border-radius: 20px;">${sub.discount_percentage}% OFF</span></div>` : ''}
             <div class="text-center mt-3">
-              <button class="btn btn-primary w-100">Select Plan</button>
+              <button class="btn w-100" style="padding: 0.75rem; font-weight: 600; border-radius: 12px;">
+                <i class="fas fa-shopping-cart"></i> Select Plan
+              </button>
             </div>
           </div>
         </div>
@@ -327,7 +427,15 @@ if (!$mysqli) {
     if (modal) modal.hide();
     
     setTimeout(() => {
-      alert(`✅ Successfully purchased ${title} for ${platform}!\n\nAmount: $${price}\n\nThank you for your subscription!`);
+      const successMessage = document.getElementById('successMessage');
+      successMessage.innerHTML = `
+        You have successfully purchased <strong style="color: #4ade80;">${title}</strong> for <strong style="color: #4ade80;">${platform}</strong>!<br>
+        <span style="color: rgba(255, 255, 255, 0.7);">Amount: <strong>$${price}</strong></span><br><br>
+        <span style="color: #78dbff;">Thank you for your subscription! 🎮</span>
+      `;
+      
+      const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+      successModal.show();
     }, 300);
   };
   

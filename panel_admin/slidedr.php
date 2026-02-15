@@ -54,7 +54,7 @@ $sliders = $connection->query("SELECT slider_id, slider_img FROM slider ORDER BY
         <?php if (!empty($edit_data['slider_img'])): ?>
             <div class="mb-3">
                 <p class="small text-muted mb-1">تصویر فعلی:</p>
-                <img src="panel_admin/uploads/<?= $edit_data['slider_img'] ?>" width="120" class="rounded border">
+                <img src="./uploads/<?= $edit_data['slider_img'] ?>" width="120" class="rounded border">
             </div>
         <?php endif; ?>
         <div class="d-flex gap-2">
@@ -79,7 +79,7 @@ $sliders = $connection->query("SELECT slider_id, slider_img FROM slider ORDER BY
                 <?php if ($sliders) while($row = $sliders->fetch_assoc()): ?>
                 <tr>
                     <td>
-                        <img src="panel_admin/uploads/<?= $row['slider_img'] ?>" width="80" class="rounded shadow-sm">
+                        <img src="./uploads/<?= $row['slider_img'] ?>" width="80" class="rounded shadow-sm">
                     </td>
                     <td>
                         <a href="admin_dashboard.php?section=slider&edit=<?= $row['slider_id'] ?>" class="btn btn-sm btn-outline-info">ویرایش</a>

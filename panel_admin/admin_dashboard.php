@@ -12,14 +12,8 @@ $page = isset($_GET['section']) ? $_GET['section'] : 'main';
     <title>پنل مدیریت گرین‌نت</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-      body{background:#f8f9fa}
-      .sidebar{width:240px;position:fixed;right:0;top:0;bottom:0;padding:1rem;background:#fff;border-left:1px solid #dee2e6}
-      .main-content{margin-right:260px;padding:1rem}
-      .nav-link{display:block;padding:.5rem .75rem;border-radius:.375rem}
-      .nav-link.active{background:#0d6efd;color:#fff}
-      .top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="admin-style.css" rel="stylesheet">
 </head>
 <body>
     <div class="sidebar">

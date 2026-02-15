@@ -1,0 +1,103 @@
+:root {
+    --post-section-bg: rgba(255, 255, 255, 0.06);
+    --post-card-bg: rgba(255, 255, 255, 0.05);
+    --post-border: rgba(255, 255, 255, 0.12);
+    --post-accent: #ff77c6;
+    --post-accent-2: #78dbff;
+    --text-muted: rgba(255, 255, 255, 0.7);
+}
+.post-section {
+    background: var(--post-section-bg);
+    border-top: 1px solid var(--post-border);
+    border-bottom: 1px solid var(--post-border);
+    margin-bottom: 3rem;
+    padding: 3rem 0;
+}
+.post-section .section-title {
+    margin-bottom: 2rem;
+}
+.post-card {
+    background: var(--post-card-bg);
+    border: 1px solid var(--post-border);
+    border-radius: 0.75rem;
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.post-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+}
+.post-card .card-body {
+    padding: 1rem;
+}
+.post-title {
+    color: #fff;
+    margin-bottom: .5rem;
+}
+.post-meta {
+    color: var(--text-muted);
+    font-size: .9rem;
+}
+.post-image {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    border-top-left-radius: .75rem;
+    border-top-right-radius: .75rem;
+    display: block;
+}
+.char-limit {
+    color: var(--text-muted);
+    font-size: .85rem;
+}
+.like-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+}
+.like-btn.active {
+    color: var(--post-accent);
+}
+.comment-list {
+    max-height: 180px;
+    overflow-y: auto;
+    border-top: 1px dashed var(--post-border);
+    padding-top: .75rem;
+}
+.comment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .35rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.comment-item:last-child {
+    border-bottom: none;
+}
+.comment-user {
+    color: var(--post-accent-2);
+    font-weight: 600;
+    margin-right: .5rem;
+}
+.comment-text {
+    color: #fff;
+}
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: .75rem;
+}
+.post-actions .form-control {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--post-border);
+    color: #fff;
+}
+.post-actions .btn {
+    border-radius: .5rem;
+}
+@media (max-width: 768px) {
+    .post-section {
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+    }
+}

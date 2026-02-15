@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+    <link rel="stylesheet" href="login-page-css.css"/>
+</head>
+<body>
+    <div class="login-box">
+        <h2>Login</h2>
+        <form onsubmit="return sub()">
+            <input type="text" id="username" placeholder="Username" required />
+            <input type="password" id="password" placeholder="Password" required />
+            <button type="submit">Login</button>
+                <h5 class="account">Don't have an account? </h5>
+                <h5 class="link"><a href="sign-up.html">Sign Up</a></h5>
+        </form>
+    </div>
+    <script>
+        function sub() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            if (username === "ali" && password === "12345") {
+                window.location.href = "arcade-gaming.html";
+                return false; // Prevent form submission
+            } else {
+                alert("Invalid username or password.");
+                return false; // Prevent form submission
+            }
+        }
+    </script>
+</body>
+</html>
